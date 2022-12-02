@@ -1,27 +1,31 @@
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../CSS/Login.css"
+import "../CSS/Login.css";
 
 function Login() {
-  const [login,setLogin] = useState("");
+  const [login, setLogin] = useState("");
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const navigate = useNavigate();
   const handleClick = async () => {
-    await axios.post("https://reqres.in/api/login",{
-        email:emailRef.current.value,
-        password:passwordRef.current.value
-    }).then(res=>setLogin(res.data.token));
-    console.log(login)
-    if(login){
-      alert("Login successful")
-      navigate("/employee")
-    }
-    else{
-      alert("something went wrong please try again")
-    }
+    await axios
+      .post("https://reqres.in/api/login", {
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+      })
+      .then((res) => setLogin(res.data.token))
+      .catch((err) =>
+        alert("Wrong Credentials! please provide correct email id")
+      );
   };
+
+  useEffect(() => {
+    if (login) {
+      alert("Login successful");
+      navigate("/employee");
+    }
+  }, [login]);
 
   return (
     <div className="form"> 
